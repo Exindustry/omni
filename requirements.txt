@@ -1,0 +1,7 @@
+django
+djangorestframework
+markdown
+django-filter
+django-simple-history
+coverage
+requests

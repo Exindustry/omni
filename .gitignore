@@ -1,0 +1,5 @@
+study.txt
+.vscode
+__pycache__/
+*.pyc
+*.pyo
