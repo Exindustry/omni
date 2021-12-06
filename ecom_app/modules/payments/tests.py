@@ -34,3 +34,21 @@ class PaymentTestClass(TestCase):
             order_id = row[-1:]
             self.assertEqual(PaymentMvto.objects.filter(
                 order_id=order_id, payment_id=response.json().get('id')).count() > 0, True)
+
+
+    def test_api_get_payment(self):
+
+        user = TestGlobal.create_user_test()
+        token = TestGlobal.get_token_test(user)
+        order = TestGlobal.create_order_test(user, 1)
+        payment = TestGlobal.create_payment_test(user, order)
+
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION=token)
+
+        response = client.post(
+            f"{self.module_name}{payment.id}/list_payment_mvto/"
+        )
+
+        self.assertIs(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json().get('results', [])) > 0, True)

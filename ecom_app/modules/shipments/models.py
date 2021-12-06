@@ -41,9 +41,11 @@ def update_before(sender, instance, **kwargs):
     if not instance.received_date and instance.status == 'Recibido':
         instance.received_date = timezone.now()
 
+    return True
 
-@receiver(post_save, sender=Shipment, dispatch_uid="update_before_count")
-def update_before(sender, instance, **kwargs):
+
+@receiver(post_save, sender=Shipment, dispatch_uid="update_after_count")
+def update_after(sender, instance, **kwargs):
     update_dict = {}
     if instance.status == 'Despachado' and not instance.shipment_notification:
         subject = f'Su pedido {instance.order} ha sido {instance.status}'
@@ -59,3 +61,5 @@ def update_before(sender, instance, **kwargs):
         instance.__class__.objects.filter(id=instance.id).update(**update_dict)
         send_email(subject=subject, body=body,
                    rcpt=[instance.created_by.email])
+
+    return True

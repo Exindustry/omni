@@ -15,10 +15,37 @@ class TestGlobal:
         from modules.users.models import User
 
         fields = {'username': 'demo', 'password': 'demo.1423',
-                  'email': 'demo@demo.com', 'name': 'demo', 'last_name': 'demo'}
+                  'email': 'cardona.zero@gmail.com', 'name': 'demo', 'last_name': 'demo'}
 
         base_obj = User.objects.create_user(**fields)
         base_obj.save()
+        return base_obj
+
+    def create_payment_test(user, order):
+
+        from modules.payments.models import Payment, PaymentMvto
+
+        fields = {"name": "P2", "amount": 10000.0,"created_by": user,"orders": [{"order": order,"amount": 7000.0},{"order": order,"amount": 3000.0}]}
+        fields_copy = fields.copy()
+        del fields_copy['orders']
+
+        base_obj = Payment.objects.create(**fields_copy)
+
+        for row in fields.get('orders'):
+            PaymentMvto.objects.create(**row, payment=base_obj)
+
+        return base_obj
+
+    def create_shipment_test(user, cant=1, order=None):
+
+        from modules.shipments.models import Shipment
+
+        fields = {'status': 'Nuevo', 'order': order, 'created_by': user}
+
+        for row in range(cant):
+            base_obj = Shipment.objects.create(**fields)
+            base_obj.save()
+
         return base_obj
 
     def create_product_test(user, cant=1):

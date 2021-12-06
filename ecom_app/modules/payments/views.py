@@ -46,7 +46,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @action(detail=True, methods=['post', 'get'])
-    def add_payment_mvto(self, request, pk=None):
+    def create_payment_mvto(self, request, pk=None):
 
         self.serializer_class = PaymentMvtoSerializer
         payment = self.get_object()

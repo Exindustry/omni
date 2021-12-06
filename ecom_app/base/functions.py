@@ -1,7 +1,5 @@
 from django.core.mail import get_connection
 from django.core.mail.message import EmailMultiAlternatives
-from asgiref.sync import sync_to_async, async_to_sync
-import asyncio
 import threading
 
 def send_email(subject='', body='', rcpt=[]):
@@ -30,3 +28,5 @@ def send_email(subject='', body='', rcpt=[]):
     email.html_message = True
     mailThread = threading.Thread(target=lambda x: x.send(), args=(email,))
     mailThread.start()
+
+    return True
